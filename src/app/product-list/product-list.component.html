@@ -1,0 +1,67 @@
+<div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+<div class="filter-controls">
+  <label>
+    Category:
+    <select
+      [(ngModel)]="selectedCategory"
+      (change)="currentPage = 1; filterAndDisplayProducts()"
+    >
+      <option value="">All</option>
+      <option *ngFor="let category of categories" [value]="category">
+        {{ category }}
+      </option>
+    </select>
+  </label>
+
+  <label>
+    Min Price:
+    <input
+      type="range"
+      [(ngModel)]="minPrice"
+      placeholder="Minimum Price"
+      (change)="currentPage = 1; filterAndDisplayProducts()"
+    />
+  </label>
+  <label>
+    Max Price:
+    <input
+      type="range"
+      [(ngModel)]="maxPrice"
+      placeholder="Maximum Price"
+      (change)="currentPage = 1; filterAndDisplayProducts()"
+    />
+  </label>
+
+  <button (click)="resetFilters(); filterAndDisplayProducts()">
+    Reset Filters
+  </button>
+</div>
+<div class="product-list" *ngIf="products && products.length">
+  <a
+    class="product-item"
+    *ngFor="let product of products"
+    [routerLink]="['/product', product.id]"
+  >
+    <div class="product-title">{{ product.title }}</div>
+    <img
+      [src]="product.image"
+      alt="{{ product.title }}"
+      class="product-image"
+    />
+    <div class="product-info">
+      <span class="product-price">{{ product.price | currency }}</span>
+      <span class="product-category">{{ product.category }}</span>
+    </div>
+  </a>
+</div>
+
+<div class="pagination-controls">
+  <button (click)="previousPage()" [disabled]="currentPage === 1">
+    Previous
+  </button>
+  <span>Page {{ currentPage }} of {{ totalPages }}</span>
+  <button (click)="nextPage()" [disabled]="currentPage === totalPages">
+    Next
+  </button>
+</div>
